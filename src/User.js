@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import store, { gotOneUser, gotNewNameForUser } from '../store.js';
+import store, { gotOneUser, gotNewNameForUser, updateUser } from '../store.js';
+import axios from 'axios';
 
 class User extends Component {
   constructor() {
@@ -40,7 +41,22 @@ class User extends Component {
 
   onNameSubmit(ev) {
     ev.preventDefault()
-    console.log('submit new user name')
+    const { currentUser } = this.state;
+    // console.log('this.state.currentUser:', this.state.currentUser)
+    axios.put(`/api/users/${currentUser.id}`, currentUser)
+      .then(result => result.data)
+      .then(user => {
+        const _users = this.state.users.filter(_user => {
+          if (_user.id !== user.id * 1) {
+            return _user;
+          }
+        })
+        const action = updateUser(_users);
+        store.dispatch(action);
+        document.location.hash('/')
+      })
+
+
   }
 
 

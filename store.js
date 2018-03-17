@@ -6,7 +6,6 @@ const initialState = {
   products: [],
   currentUser: '',
   newUser: '',
-  newName: ''
 }
 
 const GOT_ALL_USERS = 'GOT_ALL_USERS';
@@ -14,6 +13,7 @@ const GOT_ONE_USER = 'GOT_ONE_USER';
 const GET_USER_INPUT = 'GET_USER_INPUT';
 const GET_NEW_USER = 'GET_NEW_USER';
 const GOT_NEW_NAME_FOR_USER = 'GOT_NEW_NAME_FOR_USER';
+const UPDATE_USER = 'UPDATE_USER';
 
 const getAllUsers = (users) => {
   return {
@@ -50,18 +50,42 @@ const gotNewNameForUser = (newName) => {
   }
 }
 
+const updateUser = (user) => {
+  return {
+    type: UPDATE_USER,
+    user
+  }
+}
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case GOT_ALL_USERS:
-      return Object.assign({}, state, { users: action.users });
+      return Object.assign({}, state, {
+        users: action.users
+      });
     case GOT_ONE_USER:
-      return Object.assign({}, state, { currentUser: action.currentUser });
+      return Object.assign({}, state, {
+        currentUser: action.currentUser
+      });
     case GET_USER_INPUT:
-      return Object.assign({}, state, { newUser: action.newUser });
+      return Object.assign({}, state, {
+        newUser: action.newUser
+      });
     case GET_NEW_USER:
-      return Object.assign({}, state, { users: [...state.users, state.currentUser ]});
+      return Object.assign({}, state, {
+        users: [...state.users, state.currentUser ]
+      });
     case GOT_NEW_NAME_FOR_USER:
-      return Object.assign({}, state, { newName: action.newName });
+      return Object.assign({}, state, {
+        currentUser: {
+          id: state.currentUser.id,
+          name: action.newName
+        }
+      });
+    case UPDATE_USER:
+      return Object.assign({}, state, {
+        users: [...state.users, state.currentUser]
+      })
     default:
       return state;
   }
@@ -70,4 +94,4 @@ const reducer = (state = initialState, action) => {
 const store = createStore(reducer, applyMiddleware(loggerMiddleware))
 
 export default store;
-export { getAllUsers, gotOneUser, getUserInput, getNewUser, gotNewNameForUser };
+export { getAllUsers, gotOneUser, getUserInput, getNewUser, gotNewNameForUser, updateUser };

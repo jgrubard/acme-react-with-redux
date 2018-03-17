@@ -20,13 +20,21 @@ app.get('/api/users', (req, res, next) => {
 })
 
 app.post('/api/users', (req, res, next) => {
-  console.log(`***Sent From Client: ${req.body}***`);
+  // console.log(`***Sent From Client: ${req.body}***`);
   User.create(req.body)
     .then(user => res.send(user))
     .catch(next);
 })
 
-// app.put('/api/users')
+app.put('/api/users/:id', (req, res, next) => {
+  User.findById(req.params.id)
+    .then(user => {
+      Object.assign(user, req.body);
+      return user.save();
+    })
+    .then(user => res.send(user))
+    .catch(next);
+})
 
 const port = process.env.PORT || 3000;
 
