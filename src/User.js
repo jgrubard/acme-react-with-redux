@@ -12,9 +12,6 @@ class User extends Component {
     this.unsubscribe = store.subscribe(() => {
       this.setState(store.getState());
     })
-  }
-
-  componentWillMount() {
     const user = this.getUser(this.props.id)
     const action = gotUser(user);
     store.dispatch(action);
@@ -33,13 +30,11 @@ class User extends Component {
 
   render() {
 
-    const { user } = this.state;
-
-    console.log(this.state)
+    const { currentUser } = this.state;
 
     return (
       <div>
-        {user.name}
+        {currentUser.name}
       </div>
     );
   }

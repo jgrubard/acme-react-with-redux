@@ -13,9 +13,9 @@ class Nav extends Component {
           <li>
             <Link to='/products'>Products</Link>
           </li>
-{/*          <li>
+          <li>
             <Link to='/users/create'>Create a User</Link>
-          </li>*/}
+          </li>
         </ul>
       </div>
     )
