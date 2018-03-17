@@ -16,7 +16,7 @@ class App extends Component {
           <h1>ACME</h1>
           <Route component={Nav} />
           <Switch>
-            <Route exact path='/users' component={Users} />
+            <Route exact path='/' component={Users} />
             <Route exact path='/users/create' component={UserCreate} />
             <Route exact path='/users/:id' render={({ match }) => <User id={match.params.id} />} />
             <Route exact path='/products' component={Products} />

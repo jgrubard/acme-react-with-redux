@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import store, { getNewUserFromClient, gotNewUserFromClient } from '../store.js';
+import store, { getUserInput, getNewUser } from '../store.js';
 import axios from 'axios';
 
 class UserCreate extends Component {
@@ -22,30 +22,28 @@ class UserCreate extends Component {
 
   onInputChange(ev) {
     // console.log(ev.target.value);
-    const action = getNewUserFromClient(ev.target.value);
+    const action = getUserInput(ev.target.value);
     store.dispatch(action);
   }
 
   onSubmitUser(ev) {
     ev.preventDefault();
-    const name = this.state.newUser;
-    // console.log(this.state.newUser)
-    axios.post('/api/users', { name })
+    const { newUser } = this.state;
+    axios.post('/api/users', { name: newUser })
       .then(result => result.data)
       .then(user => {
-        const action = gotNewUserFromClient(user)
+        const action = getNewUser(user)
         store.dispatch(action);
-        // document.location.hash = '/users';
+        document.location.hash = '/'
       })
       .then(() => {
-        store.dispatch(getNewUserFromClient(''))
+        store.dispatch(getUserInput(''))
       })
   }
 
   render() {
 
     const { onInputChange, onSubmitUser } = this;
-    // console.log(this.state)
 
     return (
       <div>

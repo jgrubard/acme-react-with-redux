@@ -1,40 +1,63 @@
 import React, { Component } from 'react';
-import store, { gotUser } from '../store.js'
+import store, { gotOneUser, gotNewNameForUser } from '../store.js';
 
 class User extends Component {
   constructor() {
     super();
     this.state = store.getState();
-    this.getUser = this.getUser.bind(this)
+    this.setUser = this.setUser.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.onNameSubmit = this.onNameSubmit.bind(this);
   }
 
   componentDidMount() {
-    this.unsubscribe = store.subscribe(() => {
-      this.setState(store.getState());
-    })
-    const user = this.getUser(this.props.id)
-    const action = gotUser(user);
-    store.dispatch(action);
+    this.setUser(this.props.id);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setUser(nextProps.id);
   }
 
   componentWillUnmount() {
+    store.dispatch(gotOneUser(''))
     this.unsubscribe();
   }
 
-  getUser(id) {
-    const user = this.state.users.find(user => user.id === id * 1);
-    return user;
+  setUser(id) {
+    this.unsubscribe = store.subscribe(() => {
+      this.setState(store.getState());
+    })
+    const { users } = this.state;
+    const user = users.find(_user => _user.id === id * 1);
+    const action = gotOneUser(user);
+    store.dispatch(action);
+  }
+
+  handleInputChange(ev) {
+    const action = gotNewNameForUser(ev.target.value);
+    store.dispatch(action);
+  }
+
+  onNameSubmit(ev) {
+    ev.preventDefault()
+    console.log('submit new user name')
   }
 
 
 
   render() {
-
-    const { currentUser } = this.state;
-
+    const { handleInputChange, onNameSubmit } = this;
+    const { name } = this.state.currentUser;
     return (
       <div>
-        {currentUser.name}
+        <form onSubmit={onNameSubmit}>
+          <input
+            value={name}
+            onChange={handleInputChange}
+          />
+          <button>Submit New Name</button>
+        </form>
+        <button>Delete</button>
       </div>
     );
   }

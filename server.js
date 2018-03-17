@@ -15,15 +15,18 @@ app.get('/', (req, res, next) => {
 
 app.get('/api/users', (req, res, next) => {
   User.findAll()
-    .then(users => res.json(users))
+    .then(users => res.send(users))
     .catch(next);
 })
 
 app.post('/api/users', (req, res, next) => {
+  console.log(`***Sent From Client: ${req.body}***`);
   User.create(req.body)
-    .then(user => res.json(user))
+    .then(user => res.send(user))
     .catch(next);
 })
+
+// app.put('/api/users')
 
 const port = process.env.PORT || 3000;
 

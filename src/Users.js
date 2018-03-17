@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import store, { gotUsersFromServer } from '../store.js';
+import store, { getAllUsers } from '../store.js';
 import axios from 'axios';
 
 class Users extends Component {
@@ -13,7 +13,7 @@ class Users extends Component {
     return axios.get('/api/users')
       .then(result => result.data)
       .then(users => {
-        const action = gotUsersFromServer(users)
+        const action = getAllUsers(users)
         store.dispatch(action)
       })
   }
