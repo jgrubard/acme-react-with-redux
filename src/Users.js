@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import store, { fetchUsersThunk } from '../store.js';
+import store, { fetchUsersThunk } from './store.js';
 
 
 class Users extends Component {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import store, { getUserInput, postUserThunk } from '../store.js';
+import store, { getUserInput, postUserThunk } from './store.js';
 
 
 class UserCreate extends Component {

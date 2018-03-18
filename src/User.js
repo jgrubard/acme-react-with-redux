@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import store, { gotOneUser, gotNewNameForUser, updateUserThunk, deleteUserThunk } from '../store.js';
+import store, { gotOneUser, gotNewNameForUser, updateUserThunk, deleteUserThunk } from './store.js';
 
 
 class User extends Component {

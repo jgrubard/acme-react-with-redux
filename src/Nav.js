@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import store from '../store.js';
+import store from './store.js';
 
 
 class Nav extends Component {
