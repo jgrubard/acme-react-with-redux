@@ -13,7 +13,8 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <h1>ACME</h1>
+          <h1>ACME Users</h1>
+          <h2>React & Redux</h2>
           <Route component={Nav} />
           <Switch>
             <Route exact path='/' component={Users} />

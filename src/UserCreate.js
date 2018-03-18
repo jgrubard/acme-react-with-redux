@@ -21,7 +21,6 @@ class UserCreate extends Component {
   }
 
   onInputChange(ev) {
-    // console.log(ev.target.value);
     const action = getUserInput(ev.target.value);
     store.dispatch(action);
   }
@@ -48,8 +47,8 @@ class UserCreate extends Component {
     return (
       <div>
         <form onSubmit={onSubmitUser}>
-          <input onChange={onInputChange} value={this.state.newUser} />
-          <button>Submit</button>
+          <input className='form-control' onChange={onInputChange} value={this.state.newUser} />
+          <button className='btn btn-success'>Submit</button>
         </form>
       </div>
     );

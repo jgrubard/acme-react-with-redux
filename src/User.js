@@ -68,9 +68,8 @@ class User extends Component {
         })
         const action = deleteUser(_users)
         store.dispatch(action)
-        document.location.hash = '/'
       })
-      // .then(() => document.location.hash = '/')
+      .then(() => document.location.hash = '/')
   }
 
 
@@ -82,13 +81,14 @@ class User extends Component {
       <div>
         <form onSubmit={onNameSubmit}>
           <input
+            className='form-control'
             value={currentUser.name}
             onChange={handleInputChange}
           />
-          <button>Submit New Name</button>
+          <button className='btn btn-primary'>Submit New Name</button>
         </form>
         <form onSubmit={(ev) => onDeleteUser(ev, currentUser)}>
-          <button>Delete</button>
+          <button className='btn btn-danger'>Delete</button>
         </form>
       </div>
     );

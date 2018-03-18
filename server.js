@@ -9,22 +9,23 @@ app.use(require('body-parser').json());
 
 app.use('/dist', express.static(path.join(__dirname, 'dist')));
 
+app.use('/vendors', express.static(path.join(__dirname, 'node_modules')));
+
 app.get('/', (req, res, next) => {
   res.sendFile(path.join(__dirname, 'index.html'))
-})
+});
 
 app.get('/api/users', (req, res, next) => {
   User.findAll()
     .then(users => res.send(users))
     .catch(next);
-})
+});
 
 app.post('/api/users', (req, res, next) => {
-  // console.log(`***Sent From Client: ${req.body}***`);
   User.create(req.body)
     .then(user => res.send(user))
     .catch(next);
-})
+});
 
 app.put('/api/users/:id', (req, res, next) => {
   User.findById(req.params.id)
@@ -34,7 +35,7 @@ app.put('/api/users/:id', (req, res, next) => {
     })
     .then(user => res.send(user))
     .catch(next);
-})
+});
 
 app.delete('/api/users/:id', (req, res, next) => {
   User.findById(req.params.id)
@@ -50,4 +51,3 @@ app.listen(port, () => console.log(`** Listening on port ${port} **`));
 
 sync()
   .then(() => seed());
-
