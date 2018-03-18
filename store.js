@@ -1,5 +1,7 @@
 import { createStore, applyMiddleware } from 'redux';
 import loggerMiddleware from 'redux-logger';
+import thunkMiddleware from 'redux-thunk';
+import axios from 'axios';
 
 const initialState = {
   users: [],
@@ -65,6 +67,65 @@ const deleteUser = (users) => {
   }
 }
 
+const fetchUsersThunk = () => {
+  return dispatch => {
+    return axios.get('/api/users')
+      .then(result => result.data)
+      .then(users => {
+        const action = getAllUsers(users)
+        dispatch(action)
+      })
+  }
+}
+
+const postUserThunk = (newUser) => {
+  return dispatch  => {
+    axios.post('/api/users', { name: newUser })
+      .then(result => result.data)
+      .then(user => {
+        const action = getNewUser(user)
+        dispatch(action);
+        document.location.hash = '/'
+      })
+      .then(() => {
+        dispatch(getUserInput(''))
+      })
+  }
+}
+
+const updateUserThunk = (currentUser, users) => {
+  return dispatch => {
+    axios.put(`/api/users/${currentUser.id}`, currentUser)
+      .then(result => result.data)
+      .then(user => {
+        const _users = users.map(_user => {
+          if (_user.id === user.id * 1) {
+            return user;
+          }
+          return _user;
+        })
+        const action = updateUser(_users);
+        dispatch(action);
+      })
+      .then(() => document.location.hash = '/')
+  }
+}
+
+const deleteUserThunk = (user, users) => {
+  return dispatch => {
+    axios.delete(`/api/users/${user.id}`)
+      .then(result => result.data)
+      .then(user => {
+        const _users = users.filter(_user => {
+          return _user.id !== user.id
+        })
+        const action = deleteUser(_users)
+        dispatch(action)
+      })
+      .then(() => document.location.hash = '/')
+  }
+}
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case GOT_ALL_USERS:
@@ -103,7 +164,7 @@ const reducer = (state = initialState, action) => {
   }
 }
 
-const store = createStore(reducer, applyMiddleware(loggerMiddleware))
+const store = createStore(reducer, applyMiddleware(thunkMiddleware, loggerMiddleware))
 
 export default store;
-export { getAllUsers, gotOneUser, getUserInput, getNewUser, gotNewNameForUser, updateUser, deleteUser };
+export { getAllUsers, gotOneUser, getUserInput, getNewUser, gotNewNameForUser, updateUser, deleteUser, fetchUsersThunk, postUserThunk, updateUserThunk, deleteUserThunk };

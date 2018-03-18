@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import store, { getAllUsers } from '../store.js';
-import axios from 'axios';
+import store, { fetchUsersThunk } from '../store.js';
+
 
 class Users extends Component {
   constructor() {
@@ -10,12 +10,8 @@ class Users extends Component {
   }
 
   getUsers() {
-    return axios.get('/api/users')
-      .then(result => result.data)
-      .then(users => {
-        const action = getAllUsers(users)
-        store.dispatch(action)
-      })
+    const thunk = fetchUsersThunk()
+    store.dispatch(thunk);
   }
 
   componentDidMount() {

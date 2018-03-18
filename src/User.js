@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import store, { gotOneUser, gotNewNameForUser, updateUser, deleteUser } from '../store.js';
-import axios from 'axios';
+import store, { gotOneUser, gotNewNameForUser, updateUserThunk, deleteUserThunk } from '../store.js';
+
 
 class User extends Component {
   constructor() {
@@ -16,9 +16,9 @@ class User extends Component {
     this.setUser(this.props.id);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setUser(nextProps.id);
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   this.setUser(nextProps.id);
+  // }
 
   componentWillUnmount() {
     store.dispatch(gotOneUser({}))
@@ -42,37 +42,17 @@ class User extends Component {
 
   onNameSubmit(ev) {
     ev.preventDefault()
-    const { currentUser } = this.state;
-    axios.put(`/api/users/${currentUser.id}`, currentUser)
-      .then(result => result.data)
-      .then(user => {
-        const _users = this.state.users.map(_user => {
-          if (_user.id === user.id * 1) {
-            return user;
-          }
-          return _user;
-        })
-        const action = updateUser(_users);
-        store.dispatch(action);
-      })
-      .then(() => document.location.hash = '/')
+    const { currentUser, users } = this.state;
+    const thunk = updateUserThunk(currentUser, users);
+    store.dispatch(thunk);
   }
 
   onDeleteUser(ev, user) {
     ev.preventDefault();
-    axios.delete(`/api/users/${user.id}`)
-      .then(result => result.data)
-      .then(user => {
-        const _users = this.state.users.filter(_user => {
-          return _user.id !== user.id
-        })
-        const action = deleteUser(_users)
-        store.dispatch(action)
-      })
-      .then(() => document.location.hash = '/')
+    const { users } = this.state;
+    const thunk = deleteUserThunk(user, users);
+    store.dispatch(thunk)
   }
-
-
 
   render() {
     const { handleInputChange, onNameSubmit, onDeleteUser } = this;
