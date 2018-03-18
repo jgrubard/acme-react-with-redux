@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import store, { gotOneUser, gotNewNameForUser, updateUser } from '../store.js';
+import store, { gotOneUser, gotNewNameForUser, updateUser, deleteUser } from '../store.js';
 import axios from 'axios';
 
 class User extends Component {
@@ -9,6 +9,7 @@ class User extends Component {
     this.setUser = this.setUser.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.onNameSubmit = this.onNameSubmit.bind(this);
+    this.onDeleteUser = this.onDeleteUser.bind(this);
   }
 
   componentDidMount() {
@@ -20,7 +21,7 @@ class User extends Component {
   }
 
   componentWillUnmount() {
-    store.dispatch(gotOneUser(''))
+    store.dispatch(gotOneUser({}))
     this.unsubscribe();
   }
 
@@ -42,38 +43,53 @@ class User extends Component {
   onNameSubmit(ev) {
     ev.preventDefault()
     const { currentUser } = this.state;
-    // console.log('this.state.currentUser:', this.state.currentUser)
     axios.put(`/api/users/${currentUser.id}`, currentUser)
       .then(result => result.data)
       .then(user => {
-        const _users = this.state.users.filter(_user => {
-          if (_user.id !== user.id * 1) {
-            return _user;
+        const _users = this.state.users.map(_user => {
+          if (_user.id === user.id * 1) {
+            return user;
           }
+          return _user;
         })
         const action = updateUser(_users);
         store.dispatch(action);
-        document.location.hash('/')
       })
+      .then(() => document.location.hash = '/')
+  }
 
-
+  onDeleteUser(ev, user) {
+    ev.preventDefault();
+    axios.delete(`/api/users/${user.id}`)
+      .then(result => result.data)
+      .then(user => {
+        const _users = this.state.users.filter(_user => {
+          return _user.id !== user.id
+        })
+        const action = deleteUser(_users)
+        store.dispatch(action)
+        document.location.hash = '/'
+      })
+      // .then(() => document.location.hash = '/')
   }
 
 
 
   render() {
-    const { handleInputChange, onNameSubmit } = this;
-    const { name } = this.state.currentUser;
+    const { handleInputChange, onNameSubmit, onDeleteUser } = this;
+    const { currentUser } = this.state;
     return (
       <div>
         <form onSubmit={onNameSubmit}>
           <input
-            value={name}
+            value={currentUser.name}
             onChange={handleInputChange}
           />
           <button>Submit New Name</button>
         </form>
-        <button>Delete</button>
+        <form onSubmit={(ev) => onDeleteUser(ev, currentUser)}>
+          <button>Delete</button>
+        </form>
       </div>
     );
   }

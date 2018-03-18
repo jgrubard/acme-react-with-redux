@@ -4,7 +4,7 @@ import loggerMiddleware from 'redux-logger';
 const initialState = {
   users: [],
   products: [],
-  currentUser: '',
+  currentUser: {},
   newUser: '',
 }
 
@@ -14,6 +14,7 @@ const GET_USER_INPUT = 'GET_USER_INPUT';
 const GET_NEW_USER = 'GET_NEW_USER';
 const GOT_NEW_NAME_FOR_USER = 'GOT_NEW_NAME_FOR_USER';
 const UPDATE_USER = 'UPDATE_USER';
+const DELETE_USER = 'DELETE_USER';
 
 const getAllUsers = (users) => {
   return {
@@ -50,10 +51,17 @@ const gotNewNameForUser = (newName) => {
   }
 }
 
-const updateUser = (user) => {
+const updateUser = (users) => {
   return {
     type: UPDATE_USER,
-    user
+    users
+  }
+}
+
+const deleteUser = (users) => {
+  return {
+  type: DELETE_USER,
+  users
   }
 }
 
@@ -84,7 +92,11 @@ const reducer = (state = initialState, action) => {
       });
     case UPDATE_USER:
       return Object.assign({}, state, {
-        users: [...state.users, state.currentUser]
+        users: action.users
+      })
+    case DELETE_USER:
+      return Object.assign({}, state, {
+        users: action.users
       })
     default:
       return state;
@@ -94,4 +106,4 @@ const reducer = (state = initialState, action) => {
 const store = createStore(reducer, applyMiddleware(loggerMiddleware))
 
 export default store;
-export { getAllUsers, gotOneUser, getUserInput, getNewUser, gotNewNameForUser, updateUser };
+export { getAllUsers, gotOneUser, getUserInput, getNewUser, gotNewNameForUser, updateUser, deleteUser };
