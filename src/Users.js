@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import store, { fetchUsersThunk } from './store.js';
+import store from './store.js';
 
 
 class Users extends Component {
@@ -9,13 +9,7 @@ class Users extends Component {
     this.state = store.getState();
   }
 
-  getUsers() {
-    const thunk = fetchUsersThunk()
-    store.dispatch(thunk);
-  }
-
   componentDidMount() {
-    this.getUsers();
     this.unsubscribe = store.subscribe(() => {
       this.setState(store.getState());
     })

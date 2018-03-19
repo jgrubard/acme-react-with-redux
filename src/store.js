@@ -72,8 +72,8 @@ export const fetchUsersThunk = () => {
     return axios.get('/api/users')
       .then(result => result.data)
       .then(users => {
-        const action = getAllUsers(users)
-        dispatch(action)
+        const action = getAllUsers(users);
+        dispatch(action);
       })
       .catch(err => console.error(err));
   }
@@ -89,7 +89,7 @@ export const postUserThunk = (newUser) => {
         document.location.hash = '/'
       })
       .then(() => {
-        dispatch(getUserInput(''))
+        dispatch(getUserInput(''));
       })
       .catch(err => console.error(err));
   }
@@ -122,8 +122,8 @@ export const deleteUserThunk = (user, users) => {
         const _users = users.filter(_user => {
           return _user.id !== user.id
         })
-        const action = deleteUser(_users)
-        dispatch(action)
+        const action = deleteUser(_users);
+        dispatch(action);
       })
       .then(() => document.location.hash = '/')
       .catch(err => console.error(err));
