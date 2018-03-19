@@ -18,56 +18,56 @@ const GOT_NEW_NAME_FOR_USER = 'GOT_NEW_NAME_FOR_USER';
 const UPDATE_USER = 'UPDATE_USER';
 const DELETE_USER = 'DELETE_USER';
 
-const getAllUsers = (users) => {
+export const getAllUsers = (users) => {
   return {
     type: GOT_ALL_USERS,
     users
   };
 }
 
-const gotOneUser = (currentUser) => {
+export const gotOneUser = (currentUser) => {
   return {
     type: GOT_ONE_USER,
     currentUser
   }
 }
 
-const getUserInput = (newUser) => {
+export const getUserInput = (newUser) => {
   return {
     type: GET_USER_INPUT,
     newUser
   }
 }
 
-const getNewUser = (newUser) => {
+export const getNewUser = (newUser) => {
   return {
     type: GET_NEW_USER,
     newUser
   }
 }
 
-const gotNewNameForUser = (newName) => {
+export const gotNewNameForUser = (newName) => {
   return {
     type: GOT_NEW_NAME_FOR_USER,
     newName
   }
 }
 
-const updateUser = (users) => {
+export const updateUser = (users) => {
   return {
     type: UPDATE_USER,
     users
   }
 }
 
-const deleteUser = (users) => {
+export const deleteUser = (users) => {
   return {
   type: DELETE_USER,
   users
   }
 }
 
-const fetchUsersThunk = () => {
+export const fetchUsersThunk = () => {
   return dispatch => {
     return axios.get('/api/users')
       .then(result => result.data)
@@ -75,10 +75,11 @@ const fetchUsersThunk = () => {
         const action = getAllUsers(users)
         dispatch(action)
       })
+      .catch(err => console.error(err));
   }
 }
 
-const postUserThunk = (newUser) => {
+export const postUserThunk = (newUser) => {
   return dispatch  => {
     axios.post('/api/users', { name: newUser })
       .then(result => result.data)
@@ -90,10 +91,11 @@ const postUserThunk = (newUser) => {
       .then(() => {
         dispatch(getUserInput(''))
       })
+      .catch(err => console.error(err));
   }
 }
 
-const updateUserThunk = (currentUser, users) => {
+export const updateUserThunk = (currentUser, users) => {
   return dispatch => {
     axios.put(`/api/users/${currentUser.id}`, currentUser)
       .then(result => result.data)
@@ -108,10 +110,11 @@ const updateUserThunk = (currentUser, users) => {
         dispatch(action);
       })
       .then(() => document.location.hash = '/')
+      .catch(err => console.error(err));
   }
 }
 
-const deleteUserThunk = (user, users) => {
+export const deleteUserThunk = (user, users) => {
   return dispatch => {
     axios.delete(`/api/users/${user.id}`)
       .then(result => result.data)
@@ -123,10 +126,11 @@ const deleteUserThunk = (user, users) => {
         dispatch(action)
       })
       .then(() => document.location.hash = '/')
+      .catch(err => console.error(err));
   }
 }
 
-const reducer = (state = initialState, action) => {
+const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case GOT_ALL_USERS:
       return Object.assign({}, state, {
@@ -164,7 +168,6 @@ const reducer = (state = initialState, action) => {
   }
 }
 
-const store = createStore(reducer, applyMiddleware(thunkMiddleware, loggerMiddleware))
+const store = createStore(userReducer, applyMiddleware(thunkMiddleware, loggerMiddleware))
 
 export default store;
-export { getAllUsers, gotOneUser, getUserInput, getNewUser, gotNewNameForUser, updateUser, deleteUser, fetchUsersThunk, postUserThunk, updateUserThunk, deleteUserThunk };

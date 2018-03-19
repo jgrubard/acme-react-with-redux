@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
 class Products extends Component {
+
   render() {
-    return(
+    return (
       <div className='jumbotron'>
         <h4>Sorry, No Products Yet!</h4>
       </div>

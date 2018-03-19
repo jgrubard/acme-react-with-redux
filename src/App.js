@@ -4,8 +4,6 @@ import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import Users from './Users.js';
 import Products from './Products.js'
 import Nav from './Nav.js'
-// import User from './User.js'
-// import UserCreate from './UserCreate.js';
 import UserForm from './UserForm.js'
 
 const App = () => {
