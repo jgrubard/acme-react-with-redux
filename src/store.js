@@ -53,17 +53,17 @@ export const gotNewNameForUser = (newName) => {
   }
 }
 
-export const updateUser = (users) => {
+export const updateUser = (user) => {
   return {
     type: UPDATE_USER,
-    users
+    user
   }
 }
 
-export const deleteUser = (users) => {
+export const deleteUser = (user) => {
   return {
   type: DELETE_USER,
-  users
+  user
   }
 }
 
@@ -95,18 +95,12 @@ export const postUserThunk = (newUser) => {
   }
 }
 
-export const updateUserThunk = (currentUser, users) => {
+export const updateUserThunk = (currentUser) => {
   return dispatch => {
     axios.put(`/api/users/${currentUser.id}`, currentUser)
       .then(result => result.data)
       .then(user => {
-        const _users = users.map(_user => {
-          if (_user.id === user.id * 1) {
-            return user;
-          }
-          return _user;
-        })
-        const action = updateUser(_users);
+        const action = updateUser(user);
         dispatch(action);
       })
       .then(() => document.location.hash = '/')
@@ -114,15 +108,12 @@ export const updateUserThunk = (currentUser, users) => {
   }
 }
 
-export const deleteUserThunk = (user, users) => {
+export const deleteUserThunk = (user) => {
   return dispatch => {
     axios.delete(`/api/users/${user.id}`)
       .then(result => result.data)
       .then(user => {
-        const _users = users.filter(_user => {
-          return _user.id !== user.id
-        })
-        const action = deleteUser(_users);
+        const action = deleteUser(user);
         dispatch(action);
       })
       .then(() => document.location.hash = '/')
@@ -157,11 +148,11 @@ const userReducer = (state = initialState, action) => {
       });
     case UPDATE_USER:
       return Object.assign({}, state, {
-        users: action.users
+        users: [ ...state.users.filter(user => user.id !== action.user.id), action.user ]
       })
     case DELETE_USER:
       return Object.assign({}, state, {
-        users: action.users
+        users: state.users.filter(user => user.id !== action.user.id)
       })
     default:
       return state;

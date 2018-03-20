@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import store, { gotOneUser, getUserInput, gotNewNameForUser, postUserThunk, updateUserThunk, deleteUserThunk } from './store.js';
-
+import { Link } from 'react-router-dom'
+;
 class UserForm extends Component {
   constructor() {
     super();
@@ -35,30 +36,30 @@ class UserForm extends Component {
   }
 
   handleInput(ev) {
-    if(this.props.location.pathname === '/users/create') {
+    if (this.props.location.pathname === '/users/create') {
       const action = getUserInput(ev.target.value);
       store.dispatch(action);
     }
-    const action = gotNewNameForUser(ev.target.value);
-    store.dispatch(action);
+    else {
+      const action = gotNewNameForUser(ev.target.value);
+      store.dispatch(action);
+    }
   }
 
   handleUserSubmit(ev) {
     ev.preventDefault()
-    const { newUser, currentUser, users } = this.state;
-    if(this.props.location.pathname === '/users/create') {
+    const { newUser, currentUser } = this.state;
+    if (this.props.location.pathname === '/users/create') {
       const thunk = postUserThunk(newUser)
       store.dispatch(thunk)
     } else {
-      const thunk = updateUserThunk(currentUser, users);
+      const thunk = updateUserThunk(currentUser);
       store.dispatch(thunk);
     }
   }
 
-  onDeleteUser(ev, user) {
-    ev.preventDefault();
-    const { users } = this.state;
-    const thunk = deleteUserThunk(user, users);
+  onDeleteUser(user) {
+    const thunk = deleteUserThunk(user);
     store.dispatch(thunk)
   }
 
@@ -74,7 +75,7 @@ class UserForm extends Component {
           path === '/users/create' ? (
             <form onSubmit={handleUserSubmit}>
               <input className='form-control' onChange={handleInput} value={newUser} />
-              <button className='btn btn-primary' disabled={!newUser.length}>
+              <button className='btn btn-primary' disabled={!newUser.length} style={{'marginTop': '15px'}}>
                 Create User
               </button>
             </form>
@@ -82,15 +83,20 @@ class UserForm extends Component {
             <div>
               <form onSubmit={handleUserSubmit}>
                 <input className='form-control' value={currentUser.name} onChange={handleInput}/>
-                <button className='btn btn-success'>
+                <button className='btn btn-success' style={{'marginTop': '15px'}}>
                   Submit
                 </button>
               </form>
-              <form onSubmit={(ev) => onDeleteUser(ev, currentUser)}>
-                <button className='btn btn-danger'>
-                  Delete
-                </button>
-              </form>
+              <button className='btn btn-danger' onClick={() => onDeleteUser(currentUser)}>
+                Delete
+              </button>
+              <div>
+                <Link to='/'>
+                  <button className='btn btn-info' style={{'marginTop': '15px'}}>
+                    Cancel
+                  </button>
+                </Link>
+              </div>
             </div>
           )
         }

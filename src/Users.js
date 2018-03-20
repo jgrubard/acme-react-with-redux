@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import store from './store.js';
+import store, { fetchUsersThunk } from './store.js';
 
 
 class Users extends Component {
@@ -12,7 +12,9 @@ class Users extends Component {
   componentDidMount() {
     this.unsubscribe = store.subscribe(() => {
       this.setState(store.getState());
-    })
+    });
+    const thunk = fetchUsersThunk()
+    store.dispatch(thunk);
   }
 
   componentWillUnmount() {
@@ -22,8 +24,19 @@ class Users extends Component {
   render() {
 
     const { users } = this.state;
+
     return (
       <div>
+        <h2>
+          We have
+          &nbsp;
+          <span className='badge badge-primary'>
+            {users.length}
+          </span>
+          &nbsp;
+          Users
+        </h2>
+        <h4>... and we have a few errors as well!</h4>
         <ul className='list-group'>
           {
             users.map(user => (

@@ -14,11 +14,11 @@ class  App extends Component {
   }
 
   componentDidMount() {
-    const thunk = fetchUsersThunk()
-    store.dispatch(thunk);
     this.unsubscribe = store.subscribe(() => {
       this.setState(store.getState());
     })
+    const thunk = fetchUsersThunk()
+    store.dispatch(thunk);
   }
 
   componentWillUnmount() {
