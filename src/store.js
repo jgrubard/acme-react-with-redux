@@ -161,11 +161,11 @@ const userReducer = (state = initialState, action) => {
     case UPDATE_USER:
       return Object.assign({}, state, {
         users: [ ...state.users.filter(user => user.id !== action.user.id), action.user ]
-      })
+      });
     case DELETE_USER:
       return Object.assign({}, state, {
         users: state.users.filter(user => user.id !== action.user.id)
-      })
+      });
     default:
       return state;
   }

@@ -45,7 +45,8 @@ class UserForm extends Component {
     if (this.props.location.pathname === '/users/create') {
       const thunk = postUserThunk(newUser)
       store.dispatch(thunk)
-    } else {
+    }
+    else {
       const thunk = updateUserThunk(currentUser);
       store.dispatch(thunk);
     }
