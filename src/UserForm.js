@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import store, { gotOneUser, getUserInput, gotNewNameForUser, postUserThunk, updateUserThunk, deleteUserThunk, fetchOneUserThunk } from './store.js';
 import { Link } from 'react-router-dom';
-// import axios from 'axios';
 
 class UserForm extends Component {
   constructor() {
     super();
     this.state = store.getState();
-
-    // this.setCurrentUser = this.setCurrentUser.bind(this);
     this.handleInput = this.handleInput.bind(this);
     this.handleUserSubmit = this.handleUserSubmit.bind(this);
     this.onDeleteUser = this.onDeleteUser.bind(this);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
-import store, { fetchUsersThunk } from './store.js'
+import store from './store.js'
 
 import Users from './Users.js';
 import Products from './Products.js'
@@ -17,8 +17,6 @@ class  App extends Component {
     this.unsubscribe = store.subscribe(() => {
       this.setState(store.getState());
     })
-    const thunk = fetchUsersThunk()
-    store.dispatch(thunk);
   }
 
   componentWillUnmount() {
