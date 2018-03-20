@@ -1,38 +1,34 @@
 import React, { Component } from 'react';
-import store, { gotOneUser, getUserInput, gotNewNameForUser, postUserThunk, updateUserThunk, deleteUserThunk } from './store.js';
-import { Link } from 'react-router-dom'
-;
+import store, { gotOneUser, getUserInput, gotNewNameForUser, postUserThunk, updateUserThunk, deleteUserThunk, fetchOneUserThunk } from './store.js';
+import { Link } from 'react-router-dom';
+// import axios from 'axios';
+
 class UserForm extends Component {
   constructor() {
     super();
     this.state = store.getState();
 
-    this.setCurrentUser = this.setCurrentUser.bind(this);
+    // this.setCurrentUser = this.setCurrentUser.bind(this);
     this.handleInput = this.handleInput.bind(this);
     this.handleUserSubmit = this.handleUserSubmit.bind(this);
     this.onDeleteUser = this.onDeleteUser.bind(this);
   }
 
   componentDidMount() {
+
     this.unsubscribe = store.subscribe(() => {
       this.setState(store.getState());
     })
     if (this.props.location.pathname !== '/users/create') {
-      this.setCurrentUser(this.props.match.params.id)
+      const id = document.location.hash.split('/')[2] * 1;
+      const thunk = fetchOneUserThunk(id);
+      store.dispatch(thunk);
     }
   }
 
   componentWillUnmount() {
     store.dispatch(gotOneUser({}));
     this.unsubscribe();
-  }
-
-  setCurrentUser(id) {
-    const { users } = this.state;
-    const user = users.find(_user => _user.id === id * 1
-    );
-    const action = gotOneUser(user);
-    store.dispatch(action)
   }
 
   handleInput(ev) {

@@ -79,6 +79,18 @@ export const fetchUsersThunk = () => {
   }
 }
 
+export const fetchOneUserThunk = (id) => {
+  return dispatch => {
+    axios.get(`/api/users/${id}`)
+      .then(result => result.data)
+      .then(user => {
+        const action = gotOneUser(user);
+        dispatch(action);
+      })
+      .catch(err => console.error(err));
+  }
+}
+
 export const postUserThunk = (newUser) => {
   return dispatch  => {
     axios.post('/api/users', { name: newUser })
