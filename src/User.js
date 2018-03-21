@@ -6,7 +6,8 @@ class User extends Component {
     super(props);
     const user = store.getState().users.find(_user => _user.id === props.id)
     this.state = {
-      name: user ? user.name : ''
+      name: user ? user.name : '',
+      id: props.id
     }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.onClickDelete = this.onClickDelete.bind(this);
@@ -30,8 +31,11 @@ class User extends Component {
     this.setState({ name: ev.target.value });
   }
 
-  onSave(ev, user) {
+  onSave(ev) {
     ev.preventDefault()
+    const user = { id: this.state.id, name: this.state.name }
+    // console.log(this.props)
+    // console.log(user)
     store.dispatch(updateUserThunk(user))
   }
 
@@ -45,17 +49,17 @@ class User extends Component {
     const { handleInputChange, onSave, onClickDelete } = this;
     const { name } = this.state;
 
-    const user = { name: this.state.name, id: this.props.id};
+    // const user = { name: this.state.name, id: this.props.id};
 
     // console.log(user);
 
     return (
       <div>
-        <form onSubmit={ (ev) => onSave(ev, user) }>
+        <form onSubmit={ onSave }>
           <input onChange={ handleInputChange } value={ name } className='form-control'/>
           <button className='btn btn-primary' style={{ 'marginTop':'15px'}}>Update</button>
         </form>
-          <button onClick={ onClickDelete } className='btn btn-danger'>Delete</button>
+        <button onClick={ onClickDelete } className='btn btn-danger'>Delete</button>
       </div>
     );
   }
