@@ -15,7 +15,7 @@ const App = () => {
         <div>
           <h2>Acme Users & Products</h2>
           <h3>React & Redux</h3>
-          <Nav />
+          <Route component={Nav} />
           <Switch>
             <Route exact path='/' component={Users} />
             <Route exact path='/products' component={Products} />

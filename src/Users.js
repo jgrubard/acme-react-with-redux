@@ -24,15 +24,12 @@ class Users extends Component {
 
     const { users } = this.state;
 
-    // console.log(users, this.state.user
-
     return (
       <div>
-        <h4>Users</h4>
-        <ul>
+        <ul className='list-group'>
           {
             users.map(user => (
-              <li key={user.id}>
+              <li key={user.id} className='list-group-item'>
                 <Link to={`/users/${user.id}`}>
                   {user.name}
                 </Link>
