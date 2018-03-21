@@ -6,10 +6,11 @@ class User extends Component {
     super(props);
     const user = store.getState().users.find(_user => _user.id === props.id)
     this.state = {
-      name: user.name || ''
+      name: user ? user.name : ''
     }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.onClickDelete = this.onClickDelete.bind(this);
+    this.onClickDelete = this.onSave.bind(this);
   }
 
   componentDidMount() {
