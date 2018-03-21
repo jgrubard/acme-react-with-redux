@@ -1,20 +1,19 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
-import store, { fetchUsersThunk } from './store.js';
-
+import { Link } from 'react-router-dom';
+import store from './store';
 
 class Users extends Component {
   constructor() {
     super();
-    this.state = store.getState();
+    this.state = {
+      users: store.getState().users
+    }
   }
 
   componentDidMount() {
     this.unsubscribe = store.subscribe(() => {
-      this.setState(store.getState());
-    });
-    const thunk = fetchUsersThunk()
-    store.dispatch(thunk);
+      this.setState({ users: store.getState().users });
+    })
   }
 
   componentWillUnmount() {
@@ -25,22 +24,15 @@ class Users extends Component {
 
     const { users } = this.state;
 
+    // console.log(users, this.state.user
+
     return (
       <div>
-        <h2>
-          We have
-          &nbsp;
-          <span className='badge badge-primary'>
-            {users.length}
-          </span>
-          &nbsp;
-          Users
-        </h2>
-        <h4>... and we have a few errors as well!</h4>
-        <ul className='list-group'>
+        <h4>Users</h4>
+        <ul>
           {
             users.map(user => (
-              <li key={user.id} className='list-group-item'>
+              <li key={user.id}>
                 <Link to={`/users/${user.id}`}>
                   {user.name}
                 </Link>

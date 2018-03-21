@@ -21,27 +21,21 @@ app.get('/api/users', (req, res, next) => {
     .catch(next);
 });
 
-app.get('/api/users/:id', (req, res, next) => {
-  User.findById(req.params.id)
-    .then(user => res.send(user))
-    .catch(next);
-});
-
 app.post('/api/users', (req, res, next) => {
   User.create(req.body)
     .then(user => res.send(user))
     .catch(next);
-});
+})
 
 app.put('/api/users/:id', (req, res, next) => {
   User.findById(req.params.id)
     .then(user => {
-      Object.assign(user, req.body);
-      return user.save();
+      Object.assign(user, req.body)
+      return user.save()
     })
     .then(user => res.send(user))
     .catch(next);
-});
+})
 
 app.delete('/api/users/:id', (req, res, next) => {
   User.findById(req.params.id)
